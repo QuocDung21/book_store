@@ -1,5 +1,6 @@
 import axios from "axios";
-const local = "https://book-store-backend-ten.vercel.app";
+const local = "https://book-store-server-chi.vercel.app";
+//https://book-store-server-chi.vercel.app/
 const production = "";
 const api = axios.create({
   baseURL: `${local}/api`,
