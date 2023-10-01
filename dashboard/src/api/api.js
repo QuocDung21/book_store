@@ -1,7 +1,9 @@
 import axios from "axios";
+const local = "https://book-backend-ehmv.onrender.com";
+//https://book-store-server-chi.vercel.app/
+const production = "";
 const api = axios.create({
-  // baseURL: 'http://localhost:5000/api'
-  baseURL: "https://book-backend-ehmv.onrender.com/api",
-  withCredentials: true,
+  baseURL: `${local}/api`,
+  // withCredentials: true,
 });
 export default api;

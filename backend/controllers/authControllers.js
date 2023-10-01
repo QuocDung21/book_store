@@ -9,6 +9,7 @@ const { createToken } = require("../utiles/tokenCreate");
 const customerModel = require("../models/customerModel");
 
 class authControllers {
+  
   admin_login = async (req, res) => {
     const { email, password } = req.body;
     try {
