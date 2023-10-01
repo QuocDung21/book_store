@@ -1,16 +1,20 @@
 const { Schema, model } = require("mongoose");
 
-const myShopWalletSchema = new Schema(
+const voucherSchema = new Schema(
   {
-    amount: {
+    name: {
+      type: String,
+      required: true,
+    },
+    discount: {
       type: Number,
       required: true,
     },
-    manth: {
-      type: Number,
+    date: {
+      type: String,
       required: true,
     },
-    year: {
+    stock: {
       type: Number,
       required: true,
     },
@@ -18,4 +22,4 @@ const myShopWalletSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports = model("myShopWallets", myShopWalletSchema);
+module.exports = model("voucher", voucherSchema);
