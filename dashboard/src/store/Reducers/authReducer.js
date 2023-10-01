@@ -19,7 +19,6 @@ export const admin_login = createAsyncThunk(
 export const get_auth = createAsyncThunk(
   "auth/get_auth",
   async ({ rejectWithValue, fulfillWithValue }) => {
-    console.log("Hello world");
     try {
       const { data } = await api.get("/get-users");
       console.log(data);

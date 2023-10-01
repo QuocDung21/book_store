@@ -6,7 +6,10 @@ module.exports.authMiddleware = async (req, res, next) => {
     return res.status(409).json({ error: "Please login first" });
   } else {
     try {
-      const deCodeToken = await jwt.verify(accessToken, process.env.SECRET);
+      const deCodeToken = await jwt.verify(
+        accessToken,
+        process.env.SECRET || "asdasdqw"
+      );
       req.role = deCodeToken.role;
       req.id = deCodeToken.id;
       next();
