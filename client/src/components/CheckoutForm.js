@@ -8,14 +8,11 @@ const CheckoutForm = ({ orderId }) => {
     const elements = useElements()
     const [message, setMessage] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
-
     const paymentElementOptions = {
         loyout: 'tabs'
     }
-
     const submit = async (e) => {
         e.preventDefault()
-
         if (!stripe || !elements) {
             return
         }
@@ -33,7 +30,6 @@ const CheckoutForm = ({ orderId }) => {
         }
         setIsLoading(false)
     }
-
     return (
         <form onSubmit={submit} id='payment-form' >
             <LinkAuthenticationElement

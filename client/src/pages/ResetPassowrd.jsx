@@ -1,29 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import Headers from "../components/Headers";
 import Footer from "../components/Footer";
 import { FaFacebookF } from "react-icons/fa";
-import FadeLoader from "react-spinners/FadeLoader";
 import { Link, useNavigate } from "react-router-dom";
 import { AiOutlineGoogle } from "react-icons/ai";
+import FadeLoader from "react-spinners/FadeLoader";
 import { useSelector, useDispatch } from "react-redux";
+import {
+  customer_block,
+  customer_login,
+  messageClear,
+} from "../store/reducers/authReducer";
 import toast from "react-hot-toast";
+import api from "../api/api";
 
-import { customer_register, messageClear } from "../store/reducers/authReducer";
-
-const Register = () => {
-  const [passwordError, setPasswordError] = useState(
-    "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.!"
-  );
-  const [passwordStrength, setPasswordStrength] = useState(0);
-  const navigate = useNavigate();
+const ResetPassowrd = () => {
   const { loader, successMessage, errorMessage, userInfo } = useSelector(
     (state) => state.auth
   );
+  const [passwordStrength, setPasswordStrength] = useState(0);
   const dispatch = useDispatch();
+  const [failedAttempts, setFailedAttempts] = useState(0);
+  const navigate = useNavigate();
   const [state, setState] = useState({
-    name: "",
     email: "",
     password: "",
+    key: "",
   });
 
   const renderPasswordStrengthBar = () => {
@@ -81,22 +83,28 @@ const Register = () => {
       validatePassword(e.target.value);
     }
   };
-  const register = (e) => {
+  const login = async (e) => {
     e.preventDefault();
-    if (!validatePassword(state.password)) {
-      toast.error(
-        "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.!"
-      );
+    if (failedAttempts >= 3) {
+      await dispatch(customer_block(state.email));
+      toast.error("Tài khoản đã bị khóa do nhập sai quá 5 lần");
       return;
     }
-    dispatch(customer_register(state));
+    dispatch(customer_login(state));
   };
+
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage);
       dispatch(messageClear());
     }
     if (errorMessage) {
+      setFailedAttempts((prevAttempts) => prevAttempts + 1);
+      if (failedAttempts + 1 >= 5) {
+        toast.error("Tài khoản đã bị khóa do nhập sai quá 5 lần");
+        dispatch(messageClear());
+        return;
+      }
       toast.error(errorMessage);
       dispatch(messageClear());
     }
@@ -105,36 +113,53 @@ const Register = () => {
     }
   }, [successMessage, errorMessage]);
 
+  const resetPassword = async (email) => {
+    await api
+      .get(`/customer/reset-pass/${email}`)
+      .then((result) => {
+        toast.success(result.data.message);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const resetPass = async (obj) => {
+    await api
+      .post(`/customer/reset-pass`, obj)
+      .then((result) => {
+        console.log(result.data.message);
+        toast.success(result.data.message);
+      })
+      .catch((err) => {
+        toast.error("Lỗi");
+      });
+  };
+
+  const handlePassword = async (e) => {
+    e.preventDefault();
+    toast.success("Vui lòng kiểm tra email để lấy mã");
+    if (!state.email) return toast.error("Vui lòng nhập Email");
+    await resetPassword(state.email);
+  };
+
   return (
     <div>
+      <Headers />
       {loader && (
         <div className="w-screen h-screen flex justify-center items-center fixed left-0 top-0 bg-[#38303033] z-[999]">
           <FadeLoader />
         </div>
       )}
-      <Headers />
       <div className="bg-slate-200 mt-4">
         <div className="w-full justify-center items-center p-10">
           <div className="grid grid-cols-2 w-[60%] mx-auto bg-[#f6f6f6] rounded-md">
             <div className="px-8 py-8">
               <h2 className="text-center w-full text-xl text-slate-600 font-bold">
-                Đăng ký
+                Đăng nhập
               </h2>
               <div>
-                <form onSubmit={register} className="text-slate-600">
-                  <div className="flex flex-col gap-1 mb-2">
-                    <label htmlFor="name">Name</label>
-                    <input
-                      onChange={inputHandle}
-                      value={state.name}
-                      type="text"
-                      className="w-full px-3 py-2 border border-slate-200 outline-none focus:border-indigo-500 rounded-md"
-                      id="name"
-                      name="name"
-                      placeholder="name"
-                      required
-                    />
-                  </div>
+                <form onSubmit={login} className="text-slate-600">
                   <div className="flex flex-col gap-1 mb-2">
                     <label htmlFor="email">Email</label>
                     <input
@@ -144,20 +169,35 @@ const Register = () => {
                       className="w-full px-3 py-2 border border-slate-200 outline-none focus:border-indigo-500 rounded-md"
                       id="email"
                       name="email"
-                      placeholder="email"
-                      required
                     />
                   </div>
+                  <div className="flex flex-col gap-1 mb-2">
+                    <label htmlFor="email">Mã xác nhận</label>
+                    <div className="flex ">
+                      <input
+                        onChange={inputHandle}
+                        value={state.key}
+                        type="text"
+                        className="w-full px-3 py-2 border border-slate-200 outline-none focus:border-indigo-500 rounded-md"
+                        id="key"
+                        name="key"
+                      />
+                      <button
+                        onClick={handlePassword}
+                        className="my-2  text-[#1da1f2]"
+                      >
+                        Lấy mã
+                      </button>
+                    </div>
+                  </div>
                   <div className="flex flex-col gap-1 mb-4 relative">
-                    <label htmlFor="password">Password</label>
+                    <label htmlFor="password">Mật khẩu mới</label>
                     <input
                       onChange={inputHandle}
-                      value={state.password}
                       type={state.showPassword ? "text" : "password"}
                       className="w-full px-3 py-2 pr-10 border border-slate-200 outline-none focus:border-indigo-500 rounded-md"
                       id="password"
                       name="password"
-                      placeholder="password"
                     />
                     <span
                       onClick={() =>
@@ -166,37 +206,33 @@ const Register = () => {
                           showPassword: !prevState.showPassword,
                         }))
                       }
-                      className="absolute inset-y-0 text-xl right-3 flex items-center cursor-pointer mt-7 "
+                      className="absolute inset-y-0 right-3 text-xl flex items-center cursor-pointer mt-7 "
                     >
                       {state.showPassword ? <span>🙈</span> : <span>👁</span>}
                     </span>
                   </div>
                   {renderPasswordStrengthBar()}
-                  <div className="flex justify-end m-2">
-                    <Link className="text-blue-500" to="/login">
-                      Quên mật khẩu ?
-                    </Link>
-                  </div>
                   <button
                     disabled={passwordStrength < 5}
-                    className={`px-8 w-full py-2 bg-purple-500 shadow-lg hover:shadow-indigo-500/30 text-white rounded-md ${
-                      passwordStrength < 5
-                        ? "opacity-50 cursor-not-allowed"
-                        : ""
-                    }`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (!validatePassword(state.password)) {
+                        toast.error(
+                          "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.!"
+                        );
+                        return;
+                      }
+                      resetPass({
+                        email: state.email,
+                        key: state.key,
+                        newPassword: state.password,
+                      });
+                    }}
+                    className="px-8 w-full py-2 bg-purple-500 shadow-lg hover:shadow-indigo-500/30 text-white rounded-md"
                   >
-                    Đăng ký
+                    Xác nhận
                   </button>
                 </form>
-              
-              </div>
-              <div className="text-center text-slate-600 pt-1">
-                <p>
-                  Bạn đã có tài khoản ?{" "}
-                  <Link className="text-blue-500" to="/login">
-                    Đăng nhập
-                  </Link>
-                </p>
               </div>
             </div>
             <div className="w-full h-full py-4 pr-4">
@@ -214,4 +250,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default ResetPassowrd;
