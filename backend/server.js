@@ -13,12 +13,19 @@ app.use(
 );
 const server = http.createServer(app);
 
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: [
+//       "http://localhost:3000",
+//       "http://localhost:3001",
+//       "https://book-store-backend-ten.vercel.app",
+//     ],
+//     credentials: true,
+//   })
+// );
+
+app.use(cors());
+
 const io = socket(server, {
   cors: {
     origin: "*",
