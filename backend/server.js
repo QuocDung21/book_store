@@ -25,7 +25,6 @@ app.use(
   })
 );
 
-app.use(cors());
 
 const io = socket(server, {
   cors: {
