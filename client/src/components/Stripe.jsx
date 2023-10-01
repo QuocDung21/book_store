@@ -5,6 +5,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import axios from "axios";
 import { useState } from "react";
 import CheckoutForm from "./CheckoutForm";
+import api from "../api/api";
 
 const stripePromise = loadStripe(
   "pk_test_51Nk8Y4F0B89ncn3xWB6ZN3GsbVIVL7Jqfa3jxtIOpPkKHcleHZw4EMPJKd4cRwm34ZARBeYmAWwu3VxyYL1gb6OT00UKNSvfvb"
@@ -20,8 +21,8 @@ const Stripe = ({ price, orderId }) => {
   };
   const create_payment = async () => {
     try {
-      const { data } = await axios.post(
-        "http://localhost:5000/api/order/create-payment",
+      const { data } = await api.post(
+        "/order/create-payment",
         { price },
         { withCredentials: true }
       );

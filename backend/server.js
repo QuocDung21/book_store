@@ -13,16 +13,17 @@ app.use(
 );
 const server = http.createServer(app);
 
-// app.use(
-//   cors({
-//     origin: [
-//       "http://localhost:3000",
-//       "http://localhost:3001",
-//       "https://book-store-backend-ten.vercel.app",
-//     ],
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://book-store-client-alpha.vercel.app",
+      "https://book-store-client-alpha.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 
 app.use(cors());
 
