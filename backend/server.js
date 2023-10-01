@@ -19,12 +19,10 @@ app.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "https://book-store-client-alpha.vercel.app",
-      "https://book-store-client-alpha.vercel.app",
     ],
     credentials: true,
   })
 );
-
 
 const io = socket(server, {
   cors: {
