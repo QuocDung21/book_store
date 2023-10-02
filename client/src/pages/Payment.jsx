@@ -3,11 +3,13 @@ import Headers from "../components/Headers";
 import Footer from "../components/Footer";
 import Stripe from "../components/Stripe";
 import { useLocation } from "react-router-dom";
+
 const Payment = () => {
   const {
     state: { price, items, orderId },
   } = useLocation();
   const [paymentMethod, setPaymentMethod] = useState("stripe");
+
   return (
     <div>
       <Headers />
@@ -31,7 +33,7 @@ const Payment = () => {
                       <span className="text-slate-600">Stripe</span>
                     </div>
                   </div>
-                  <div
+                  {/* <div
                     onClick={() => setPaymentMethod("bkash")}
                     className={`w-[20%] border-r cursor-pointer py-8 px-12 ${
                       paymentMethod === "bkash" ? "bg-white" : "bg-slate-100"
@@ -72,46 +74,46 @@ const Payment = () => {
                       />
                       <span className="text-slate-600">Roket</span>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 {paymentMethod === "stripe" && (
                   <div>
                     <Stripe orderId={orderId} price={price} />
                   </div>
                 )}
-                {paymentMethod === "bkash" && (
+                {/* {paymentMethod === "bkash" && (
                   <div className="w-full px-4 py-8 bg-white shadow-sm">
                     <button className="px-10 py-[6px] rounded-sm hover:shadow-wrange-500/20 hover:shadow-lg bg-orange-500 text-white">
-                      Pay Now
+                      Thanh toán ngay
                     </button>
                   </div>
                 )}
                 {paymentMethod === "nogot" && (
                   <div className="w-full px-4 py-8 bg-white shadow-sm">
                     <button className="px-10 py-[6px] rounded-sm hover:shadow-wrange-500/20 hover:shadow-lg bg-orange-500 text-white">
-                      Pay Now
+                      Thanh toán ngay
                     </button>
                   </div>
                 )}
                 {paymentMethod === "roket" && (
                   <div className="w-full px-4 py-8 bg-white shadow-sm">
                     <button className="px-10 py-[6px] rounded-sm hover:shadow-wrange-500/20 hover:shadow-lg bg-orange-500 text-white">
-                      Pay Now
+                      Thanh toán ngay
                     </button>
                   </div>
-                )}
+                )} */}
               </div>
             </div>
             <div className="w-5/12 md:w-full">
               <div className="pl-2 md:pl-0 md:mb-0">
                 <div className="bg-white shadow p-5 text-slate-600 flex flex-col gap-3">
-                  <h2>Order Summary</h2>
+                  <h2>Tóm tắt đơn hàng</h2>
                   <div className="flex justify-between items-center">
-                    <span>{items} items and shipping fee included</span>
+                    <span>{items} sản phẩm và phí vận chuyển</span>
                     <span>${price}</span>
                   </div>
                   <div className="flex justify-between items-center font-semibold">
-                    <span>Total Amount</span>
+                    <span>Tổng cộng</span>
                     <span className="text-lg text-orange-500">${price}</span>
                   </div>
                 </div>

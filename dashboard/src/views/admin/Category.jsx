@@ -141,9 +141,9 @@ const Category = () => {
                     <th scope="col" className="py-3 px-4">
                       Tên danh mục
                     </th>
-                    <th scope="col" className="py-3 px-4">
+                    {/* <th scope="col" className="py-3 px-4">
                       Trạng thái
-                    </th>
+                    </th> */}
                     <th scope="col" className="py-3 px-4">
                       Action
                     </th>
@@ -175,12 +175,12 @@ const Category = () => {
                       >
                         <span>{d.name}</span>
                       </td>
-                      <td
+                      {/* <td
                         scope="row"
                         className="py-1 px-4 font-medium whitespace-nowrap"
                       >
                         <span>{d.status === true ? "Hiện" : "Ẩn"}</span>
-                      </td>
+                      </td> */}
                       <td
                         scope="row"
                         className="py-1 px-4 font-medium whitespace-nowrap"
@@ -257,7 +257,7 @@ const Category = () => {
                     required
                   />
                 </div>
-                <div className="flex flex-col w-full gap-1 mb-3">
+                {/* <div className="flex flex-col w-full gap-1 mb-3">
                   <div>
                     <label htmlFor="">Trạng thái</label>
                   </div>
@@ -270,7 +270,7 @@ const Category = () => {
                       Hiện
                     </label>
                   </div>
-                </div>
+                </div> */}
                 <div>
                   <label
                     className="flex justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-indigo-500 w-full border-[#d0d2d6]"

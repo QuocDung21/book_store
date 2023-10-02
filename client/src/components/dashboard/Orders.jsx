@@ -34,7 +34,7 @@ const Orders = () => {
         <h2 className="text-xl font-semibold text-slate-600">
           Đơn hàng của tôi
         </h2>
-        <select
+        {/* <select
           className="outline-none px-3 py-1 border rounded-md text-slate-600"
           value={state}
           onChange={(e) => setState(e.target.value)}
@@ -44,7 +44,7 @@ const Orders = () => {
           <option value="pending">Đang chờ</option>
           <option value="cancelled">Đã hủy</option>
           <option value="warehouse">Kho hàng</option>
-        </select>
+        </select> */}
       </div>
       <div className="pt-4">
         <div className="relative overflow-x-auto">

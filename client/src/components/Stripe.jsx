@@ -1,8 +1,6 @@
 import React from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
-
-import axios from "axios";
 import { useState } from "react";
 import CheckoutForm from "./CheckoutForm";
 import api from "../api/api";
@@ -42,7 +40,7 @@ const Stripe = ({ price, orderId }) => {
           onClick={create_payment}
           className="px-10 py-[6px] rounded-sm hover:shadow-orange-500/20 hover:shadow-lg bg-orange-500 text-white"
         >
-          Start Payment
+          Thanh toán ngay
         </button>
       )}
     </div>
