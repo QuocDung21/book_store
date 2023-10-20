@@ -51,9 +51,9 @@ const DeactiveSellers = () => {
                 <th scope="col" className="py-3 px-4">
                   STT
                 </th>
-                <th scope="col" className="py-3 px-4">
+                {/* <th scope="col" className="py-3 px-4">
                   Hình ảnh
-                </th>
+                </th> */}
                 <th scope="col" className="py-3 px-4">
                   Tên
                 </th>
@@ -86,7 +86,7 @@ const DeactiveSellers = () => {
                   >
                     {i + 1}
                   </td>
-                  <td
+                  {/* <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
                   >
@@ -95,7 +95,7 @@ const DeactiveSellers = () => {
                       src={`http://localhost:3000/images/category/${d.image}.jpg`}
                       alt=""
                     />
-                  </td>
+                  </td> */}
                   <td
                     scope="row"
                     className="py-1 px-4 font-medium whitespace-nowrap"
