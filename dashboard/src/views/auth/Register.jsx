@@ -13,6 +13,12 @@ import {
 } from "../../store/Reducers/authReducer";
 
 const Register = () => {
+
+  const [passwordError, setPasswordError] = useState(
+    "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.!"
+  );
+  const [passwordStrength, setPasswordStrength] = useState(0);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loader, errorMessage, successMessage } = useSelector(
@@ -23,14 +29,72 @@ const Register = () => {
     email: "",
     password: "",
   });
+
+  const renderPasswordStrengthBar = () => {
+    const strengthColors = ["red", "orange", "yellow", "lime", "green"];
+    const strengthDescriptions = [
+      "Rất yếu",
+      "Yếu",
+      "Trung bình",
+      "Mạnh",
+      "Rất mạnh",
+    ];
+    return (
+      <div className="password-strength-container">
+        <div className="w-full h-3 rounded bg-gray-300 mb-2">
+          <div
+            style={{
+              width: `${(passwordStrength / 5) * 100}%`,
+              backgroundColor: strengthColors[passwordStrength - 1],
+            }}
+            className="h-full rounded"
+          ></div>
+        </div>
+        <div className="password-strength-description">
+          {strengthDescriptions[passwordStrength - 1]}
+        </div>
+      </div>
+    );
+  };
+
+  const validatePassword = (password) => {
+    let strength = 0;
+    const lengthRequirement = password.length >= 8;
+    const numberRequirement = /[0-9]/.test(password);
+    const lowercaseRequirement = /[a-z]/.test(password);
+    const uppercaseRequirement = /[A-Z]/.test(password);
+    const specialCharacterRequirement = /[@$!%*?&]/.test(password);
+
+    if (lengthRequirement) strength++;
+    if (numberRequirement) strength++;
+    if (lowercaseRequirement) strength++;
+    if (uppercaseRequirement) strength++;
+    if (specialCharacterRequirement) strength++;
+
+    setPasswordStrength(strength);
+
+    return strength === 5;
+  };
+
+
   const inputHandle = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
+
+    if (e.target.name === "password") {
+      validatePassword(e.target.value);
+    }
   };
   const submit = (e) => {
     e.preventDefault();
+    if (!validatePassword(state.password)) {
+      toast.error(
+        "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt.!"
+      );
+      return;
+    }
     dispatch(seller_register(state));
   };
   useEffect(() => {
@@ -94,6 +158,7 @@ const Register = () => {
                 required
               />
             </div>
+            {renderPasswordStrengthBar()}
             <div className="flex items-center w-full gap-3 mb-3">
               <input
                 className="w-4 h-4 text-blue-600 overflow-hidden bg-gray-100 rounded border-gray-300 focus:ring-blue-500"
@@ -118,37 +183,8 @@ const Register = () => {
             </button>
             <div className="flex items-center mb-3 gap-3 justify-center">
               <p>
-                Đã có tài khoản? <Link to="/login">Đăng nhập ở đây</Link>
+                Đã có tài khoản? <Link className="text-blue-500" to="/login">Đăng nhập ở đây</Link>
               </p>
-            </div>
-            <div className="w-full flex justify-center items-center mb-3">
-              <div className="w-[45%] bg-slate-700 h-[1px]"></div>
-              <div className="w-[10%] flex justify-center items-center">
-                <span className="pb-1">Hoặc</span>
-              </div>
-              <div className="w-[45%] bg-slate-700 h-[1px]"></div>
-            </div>
-            <div className="flex justify-center items-center gap-3">
-              <div className="w-[35px] h-[35px] flex rounded-md bg-orange-700 shadow-lg hover:shadow-orange-700/50 justify-center cursor-pointer items-center overflow-hidden">
-                <span>
-                  <AiOutlineGooglePlus />
-                </span>
-              </div>
-              <div className="w-[35px] h-[35px] flex rounded-md bg-indigo-700 shadow-lg hover:shadow-indigo-700/50 justify-center cursor-pointer items-center overflow-hidden">
-                <span>
-                  <FiFacebook />
-                </span>
-              </div>
-              <div className="w-[35px] h-[35px] flex rounded-md bg-cyan-700 shadow-lg hover:shadow-cyan-700/50 justify-center cursor-pointer items-center overflow-hidden">
-                <span>
-                  <CiTwitter />
-                </span>
-              </div>
-              <div className="w-[35px] h-[35px] flex rounded-md bg-purple-700 shadow-lg hover:shadow-purple-700/50 justify-center cursor-pointer items-center overflow-hidden">
-                <span>
-                  <AiOutlineGithub />
-                </span>
-              </div>
             </div>
           </form>
         </div>

@@ -158,7 +158,7 @@ const Profile = () => {
                       id="Shop"
                     />
                   </div>
-                  <div className="flex flex-col w-full gap-1">
+                  {/* <div className="flex flex-col w-full gap-1">
                     <label htmlFor="div">Division</label>
                     <input
                       value={state.division}
@@ -169,7 +169,7 @@ const Profile = () => {
                       name="division"
                       id="div"
                     />
-                  </div>
+                  </div> */}
                   <div className="flex flex-col w-full gap-1 mb-3">
                     <label htmlFor="district">District</label>
                     <input

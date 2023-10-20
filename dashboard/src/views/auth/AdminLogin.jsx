@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PropagateLoader } from "react-spinners";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { admin_login, messageClear } from "../../store/Reducers/authReducer";
 
 const AdminLogin = () => {
@@ -71,18 +71,28 @@ const AdminLogin = () => {
                 required
               />
             </div>
-            <div className="flex flex-col w-full gap-1 mb-5">
+            <div className="flex flex-col gap-1 mb-4 relative">
               <label htmlFor="password">Mật khẩu</label>
               <input
                 onChange={inputHandle}
                 value={state.password}
-                className="px-3 py-2 outline-none border border-slate-700 bg-transparent rounded-md text-[#d0d2d6] focus:border-indigo-500 overflow-hidden"
-                type="password"
+                type={state.showPassword ? "text" : "password"}
+                className="w-full px-3 py-2 pr-10 border border-slate-700 bg-transparent outline-none focus:border-indigo-500 rounded-md"
+                id="password"
                 name="password"
                 placeholder="Mật khẩu"
-                id="password"
-                required
               />
+              <span
+                onClick={() =>
+                  setState((prevState) => ({
+                    ...prevState,
+                    showPassword: !prevState.showPassword,
+                  }))
+                }
+                className="absolute inset-y-0 right-3 text-xl flex items-center cursor-pointer mt-7 "
+              >
+                {state.showPassword ? <span>🙈</span> : <span>👁</span>}
+              </span>
             </div>
             <button
               disabled={loader ? true : false}
@@ -94,6 +104,11 @@ const AdminLogin = () => {
                 "Đăng nhập"
               )}
             </button>
+            <div className="flex items-center mb-3 gap-3 justify-center">
+              <p className="">
+                Bạn là người bán  ?<Link className="text-blue-500" to="/login"> truy cập</Link>
+              </p>
+            </div>
           </form>
         </div>
       </div>
