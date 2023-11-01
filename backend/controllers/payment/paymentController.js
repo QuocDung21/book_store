@@ -25,6 +25,7 @@ class paymentController {
                     return_url: `http://localhost:3001/success?activeCode=${uid}`,
                     type: 'account_onboarding'
                 })
+
                 await striptModel.create({
                     sellerId: id,
                     stripeId: account.id,

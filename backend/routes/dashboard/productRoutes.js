@@ -21,7 +21,7 @@ router.post(
 );
 router.post(
   "/product-image-update",
-  authMiddleware,
+  // authMiddleware,
   productController.product_image_update
 );
 

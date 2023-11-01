@@ -42,6 +42,8 @@ const OrderDetails = () => {
     }
   }, [successMessage, errorMessage]);
 
+  console.log(order)
+
   return (
     <div className="px-2 lg:px-7 pt-5">
       <div className="w-full p-4  bg-[#283046] rounded-md">
@@ -117,6 +119,7 @@ const OrderDetails = () => {
                 <div className="mt-4 flex flex-col">
                   {order?.suborder?.map((o, i) => (
                     <div key={i + 20} className="text-[#d0d2d6] mb-6">
+
                       <div className="flex justify-start items-center gap-3">
                         <h2>Đơn hàng của Nhà cung cấp {i + 1}: </h2>
                         <span>{o.delivery_status}</span>
