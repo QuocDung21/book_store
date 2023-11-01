@@ -145,6 +145,8 @@ app.use(cookieParser());
 
 app.use("/api", require("./routes/chatRoutes"));
 
+app.use("/api", require("./routes/admin/shippingRoutes"));
+
 app.use("/api/admin", require("./routes/admin/productRoutes"));
 
 app.use("/api", require("./routes/paymentRoutes"));

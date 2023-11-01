@@ -16,7 +16,7 @@ class authControllers {
         try {
             const admin = await adminModel.findOne({email}).select("+password");
             if (admin) {
-                    const match = await bcrpty.compare(password, admin.password);
+                const match = await bcrpty.compare(password, admin.password);
                 if (match) {
                     const token = await createToken({
                         id: admin.id,
@@ -218,6 +218,33 @@ class authControllers {
                 shopInfo: {
                     shopName,
                     division,
+                    district,
+                    sub_district,
+                },
+            });
+            const userInfo = await sellerModel.findById(id);
+            responseReturn(res, 201, {
+                message: "Profile info add success",
+                userInfo,
+            });
+        } catch (error) {
+            responseReturn(res, 500, {error: error.message});
+        }
+    };
+
+
+    profile_info_update = async (req, res) => {
+        const {division, district, shopName, sub_district, status, name, email} = req.body;
+
+        const {id} = req.params;
+
+
+        try {
+            await sellerModel.findByIdAndUpdate(id, {
+                name,
+                email,
+                shopInfo: {
+                    shopName,
                     district,
                     sub_district,
                 },

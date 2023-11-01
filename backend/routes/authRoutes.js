@@ -12,8 +12,9 @@ router.post("/seller-login", authControllers.seller_login);
 router.post("/profile-image-upload", authMiddleware, authControllers.profile_image_upload);
 router.post("/profile-info-add", authMiddleware, authControllers.profile_info_add);
 
-router.get("/logout", authMiddleware, authControllers.logout);
+router.post("/profile-info-update/:id", authControllers.profile_info_update)
 
+router.get("/logout", authMiddleware, authControllers.logout);
 
 router.delete("/delete-seller/:idSeller", authControllers.deleteSeller)
 

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import toast from "react-hot-toast";
 import {useSelector, useDispatch} from "react-redux";
 import {
@@ -9,28 +9,70 @@ import axios from "axios";
 import api from "../../api/api";
 import {FaEdit, FaTrash} from "react-icons/fa";
 import {delete_category} from "../../store/Reducers/categoryReducer";
+import {country} from "../../fun/fun";
+
 
 const SellerDetails = () => {
+    const navigate = new useNavigate();
     const dispatch = useDispatch();
     const {seller, successMessage} = useSelector((state) => state.seller);
     const {sellerId} = useParams();
     const [products, setProducts] = useState([]);
+    const [countryData, setCountryData] = useState([])
     useEffect(() => {
         dispatch(get_seller(sellerId));
     }, [sellerId]);
 
     const [status, setStatus] = useState("");
 
-    const submit = (e) => {
+    const [state, setState] = useState({
+        name: "",
+        email: "",
+        district: "",
+        sub_district: "",
+        shopName: ""
+    });
+    const inputHandle = (e) => {
+        console.log(state);
+        setState({
+            ...state, [e.target.name]: e.target.value,
+        });
+    };
+
+    const updateSeller = () => {
+        api.post("/profile-info-update", {
+            name: state.name,
+            email: state.email,
+            district: state.district,
+            sub_district: state.sub_district,
+            shopName: state.shopName
+        }).then((res) => {
+            toast.success("Cập nhật thành công")
+        }).catch((e) => {
+        })
+    }
+
+    const submit = async (e) => {
         e.preventDefault();
-        dispatch(seller_status_update({
+        await api.post(`/profile-info-update/${sellerId}`, {
+            name: state.name,
+            email: state.email,
+            district: state.district,
+            sub_district: state.sub_district,
+            shopName: state.shopName
+        }).then((res) => {
+            toast.success("Cập nhật thành công")
+        }).catch((e) => {
+        })
+
+        await dispatch(seller_status_update({
             sellerId, status,
         }));
     };
 
     useEffect(() => {
         if (successMessage) {
-            toast.success(successMessage);
+            // toast.success(successMessage);
             dispatch(messageClear());
         }
     }, [successMessage]);
@@ -38,14 +80,40 @@ const SellerDetails = () => {
     useEffect(() => {
         if (seller) {
             setStatus(seller.status);
+            setSeller();
         }
     }, [seller]);
+
+
+    const getCountry = async () => {
+        try {
+            const data = await country(); // Wait for the country function to resolve
+            setCountryData(data); // Update the state with the fetched data
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const setSeller = () => {
+        setState({
+            name: seller.name,
+            email: seller.email,
+            status: seller.status,
+            shopName: seller.shopInfo?.shopName,
+            sub_district: seller.shopInfo?.sub_district,
+            district: seller.shopInfo?.district
+        });
+    }
+
+
+    useEffect(() => {
+        getCountry();
+    }, []);
 
 
     const getBooks = async (id) => {
         try {
             await api
-                .get("/admin/products/"+id)
+                .get("/admin/products/" + id)
                 .then((data) => {
                     setProducts(data.data)
                 }).catch(
@@ -58,7 +126,7 @@ const SellerDetails = () => {
     const deleteBooks = async (id) => {
         try {
             await api
-                .delete(`/admin/products/`+id)
+                .delete(`/admin/products/` + id)
                 .then((data) => {
                     toast.success("Xoá sản phẩm thành công !");
                     getBooks();
@@ -71,7 +139,7 @@ const SellerDetails = () => {
 
     useEffect(() => {
         getBooks(sellerId)
-        console.log(products)
+        console.log(seller)
     }, [products && products.length])
 
     return (<div>
@@ -94,13 +162,25 @@ const SellerDetails = () => {
                             </div>
                             <div
                                 className="flex justify-between text-sm flex-col gap-2 p-4 bg-slate-800 rounded-md">
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 items-center justify-between">
                                     <span>Tên: </span>
-                                    <span>{seller?.name}</span>
+                                    {/*<span>{seller?.name}</span>*/}
+                                    <input value={state.name}
+                                           onChange={inputHandle}
+                                           name="name"
+                                           className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
+                                    />
+
                                 </div>
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 items-center justify-between">
                                     <span>Email: </span>
-                                    <span>{seller?.email}</span>
+                                    {/*<span>{seller?.email}</span>*/}
+                                    <input
+                                        name="email"
+                                        value={state?.email}
+                                        onChange={inputHandle}
+                                        className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
+                                    />
                                 </div>
                                 <div className="flex gap-2">
                                     <span>Vai trò: </span>
@@ -108,7 +188,7 @@ const SellerDetails = () => {
                                 </div>
                                 <div className="flex gap-2">
                                     <span>Trạng thái: </span>
-                                    <span>{seller?.status}</span>
+                                    <span>  {seller.status === "active" ? "Kích hoạt" : seller.status === "pending" ? "Đang đợi duyệt" : seller.status === "deactive" ? "Khoá" : ""}</span>
                                 </div>
                             </div>
                         </div>
@@ -120,29 +200,47 @@ const SellerDetails = () => {
                             </div>
                             <div
                                 className="flex justify-between text-sm flex-col gap-2 p-4 bg-slate-800 rounded-md">
-                                <div className="flex gap-2">
+                                <div className="flex gap-2 items-center justify-between">
                                     <span>Tên cửa hàng: </span>
-                                    <span>{seller?.shopInfo?.shopName}</span>
+                                    {/*<span>{seller?.shopInfo?.shopName}</span>*/}
+                                    <input value={state?.shopName}
+                                           name="shopName"
+                                           onChange={inputHandle}
+                                           className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
+                                    />
+
                                 </div>
-                                <div className="flex gap-2">
-                                    <span>Vùng: </span>
-                                    <span>{seller?.shopInfo?.division}</span>
+                                <div className="flex gap-2 items-center justify-between">
+                                    <span>Tỉnh/Thành phố: </span>
+                                    <select
+                                        className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
+                                        name="district"
+                                        required
+                                        id=""
+                                        onChange={inputHandle}
+                                        value={state?.district}
+                                    >
+                                        {countryData.map((item) => <>
+                                            <option value={item.name}>{item.name}</option>
+
+                                        </>)}
+                                    </select>
                                 </div>
-                                <div className="flex gap-2">
-                                    <span>Quận: </span>
-                                    <span>{seller?.shopInfo?.district}</span>
-                                </div>
-                                <div className="flex gap-2">
-                                    <span>Phường: </span>
-                                    <span>{seller?.shopInfo?.sub_district}</span>
+                                <div className="flex gap-2 items-center justify-between">
+                                    <span>Địa chỉ cụ thể: </span>
+                                    <input value={state?.sub_district}
+                                           onChange={inputHandle}
+                                           name="sub_district"
+                                           className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"/>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <form onSubmit={submit}>
-                        <div className="flex gap-4 py-3">
+                    <form>
+                        {/*<form onSubmit={submit}>*/}
+                        <div className="flex gap-4 py-3 ">
                             <select
                                 value={status}
                                 onChange={(e) => setStatus(e.target.value)}
@@ -153,11 +251,20 @@ const SellerDetails = () => {
                             >
                                 <option value="">--chọn trạng thái--</option>
                                 <option value="active">Kích hoạt</option>
-                                <option value="deactive">Vô hiệu</option>
+                                <option value="deactive">Khoá</option>
                             </select>
                             <button
+                                onClick={submit}
                                 className="bg-blue-500 hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-md px-7 py-2 w-[170px] ">
-                                Gửi
+                                Cập nhật
+                            </button>
+                            <button
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    navigate(-1)
+                                }}
+                                className="bg-blue-500 hover:shadow-blue-500/50 hover:shadow-lg text-white rounded-md px-7 py-2 w-[170px] ">
+                                Trở về
                             </button>
                         </div>
                     </form>
@@ -271,12 +378,12 @@ const SellerDetails = () => {
                                             to={`/admin/dashboard/edit-product/${d._id}`}
                                             className="p-[6px] bg-yellow-500 rounded hover:shadow-lg hover:shadow-yellow-500/50"
                                         >
-                                            <FaEdit />
+                                            <FaEdit/>
                                         </Link>
                                         <span
                                             onClick={async (e) => {
                                                 e.preventDefault();
-                                               await deleteBooks(d._id)
+                                                await deleteBooks(d._id)
                                             }}
                                             className="p-[6px] bg-red-500 rounded hover:shadow-lg hover:shadow-red-500/50 cursor-pointer">
                             <FaTrash/>

@@ -3,17 +3,17 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 export const deleteFun = async (query, id, callback) => {
-   try {
-       await api.delete(query + id).then((res) => {
-           toast.success("Xoá thành công")
-           callback()
-       }).catch((err) => {
-           console.error(err)
-           toast.error("Xoá không thành công")
-       })
-   }catch (e) {
-       
-   }
+    try {
+        await api.delete(query + id).then((res) => {
+            toast.success("Xoá thành công")
+            callback()
+        }).catch((err) => {
+            console.error(err)
+            toast.error("Xoá không thành công")
+        })
+    } catch (e) {
+
+    }
 }
 
 export const getFun = async (query, id) => {
@@ -26,14 +26,29 @@ export const getFun = async (query, id) => {
     }
 }
 
-export const getAllFun = async (query ,data) => {
+export  const  formatCurrency =(number) =>{
+    if (isNaN(number)) {
+        return "Không hợp lệ";
+    }
+
+    const formatter = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+        minimumFractionDigits: 0
+    });
+
+    return formatter.format(number);
+}
+
+
+export const getAllFun = async (query, data) => {
     try {
         await api.get(query).then((res) => {
             return data
         }).catch((err) => {
             console.error(err)
         })
-    }catch (e) {
+    } catch (e) {
 
     }
 }

@@ -30,7 +30,7 @@ class homeControllers {
 
   get_categorys = async (req, res) => {
     try {
-      const categorys = await categoryModel.find({});
+      const categorys = await categoryModel.find({status: true});
       responseReturn(res, 200, {
         categorys,
       });

@@ -14,6 +14,8 @@ import {
     categoryAdd, messageClear, get_category, delete_category, categoryUpdate,
 } from "../../store/Reducers/categoryReducer";
 import {get_customers} from "../../store/Reducers/customerReducer";
+import {country, getFun, formatCurrency} from "../../fun/fun";
+import api from "../../api/api";
 
 const Category = () => {
     const dispatch = useDispatch();
@@ -23,10 +25,13 @@ const Category = () => {
     const [parPage, setParPage] = useState(5);
     const [show, setShow] = useState(false);
     const [imageShow, setImage] = useState("");
+    const [countryData, setCountryData] = useState([])
     const [state, setState] = useState({
-        name: "", status: true, image: "", id: "",
+        city: "", price: "",
     });
     const [statusFrom, setStatusFrom] = useState(0);
+
+    const [shipping, setShipping] = useState([])
     const imageHandle = (e) => {
         let files = e.target.files;
         if (files.length > 0) {
@@ -37,11 +42,29 @@ const Category = () => {
         }
     };
 
+
+    const handleEdit = (price, city) => {
+        setState({
+            price,
+            city
+        })
+    }
+
+    const getCountry = async () => {
+        try {
+            const data = await country(); // Wait for the country function to resolve
+            setCountryData(data); // Update the state with the fetched data
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     const clearState = () => {
         setState({
-            name: "", image: "", status: true,
+            city: "", price: "",
         });
     };
+
 
     const add_category = (e) => {
         e.preventDefault();
@@ -51,6 +74,16 @@ const Category = () => {
             dispatch(categoryUpdate(state));
         }
     };
+
+    const handleDelete = async (id) => {
+        await api.delete(`/shipping/${id}`)
+            .then((response) => {
+                toast.success("Xoá thành công")
+                getData()
+            }).catch((error) => {
+                console.log(error);
+            });
+    }
 
     const edit_category = (data) => {
         clearState();
@@ -62,6 +95,19 @@ const Category = () => {
             }));
         }
     };
+
+    const getData = async () => {
+        await api.get("/shipping").then((response) => {
+            return setShipping(response.data)
+        }).catch((error) => {
+
+        })
+    }
+
+    useEffect(() => {
+        getCountry()
+        getData()
+    }, []);
 
     useEffect(() => {
         if (errorMessage) {
@@ -86,6 +132,31 @@ const Category = () => {
     }, [searchValue, currentPage, parPage, successMessage]);
 
     console.log(categorys)
+
+    const inputHandle = (e) => {
+        console.log(state);
+        setState({
+            ...state, [e.target.name]: e.target.value,
+        });
+    };
+
+
+    const handleUpdate = async () => {
+        try {
+            await api.post("/shipping", {
+                city: state.city,
+                price: state.price
+            }).then(response => {
+                toast.success("Cập nhật thành công")
+                getData()
+            }).catch((error) => {
+
+            })
+        } catch (e) {
+
+        }
+    }
+
 
     const onChange = (checked) => {
         setState((prevState) => ({
@@ -118,13 +189,10 @@ const Category = () => {
                                     No
                                 </th>
                                 <th scope="col" className="py-3 px-4">
-                                    Ảnh
+                                    Tỉnh/Thành Phố
                                 </th>
                                 <th scope="col" className="py-3 px-4">
-                                    Tên danh mục
-                                </th>
-                                <th scope="col" className="py-3 px-4">
-                                    Trạng thái
+                                    Phí
                                 </th>
                                 <th scope="col" className="py-3 px-4">
                                     Action
@@ -132,63 +200,54 @@ const Category = () => {
                             </tr>
                             </thead>
                             <tbody>
-                            {categorys.map((d, i) => (<tr key={i}>
-                                <td
-                                    scope="row"
-                                    className="py-1 px-4 font-medium whitespace-nowrap"
-                                >
-                                    {i + 1}
-                                </td>
-                                <td
-                                    scope="row"
-                                    className="py-1 px-4 font-medium whitespace-nowrap"
-                                >
-                                    <img
-                                        lazy="loading"
-                                        className="w-[45px] h-[45px]"
-                                        src={d.image}
-                                        alt=""
-                                    />
-                                </td>
-                                <td
-                                    scope="row"
-                                    className="py-1 px-4 font-medium whitespace-nowrap"
-                                >
-                                    <span>{d.name}</span>
-                                </td>
-                                <td
-                                    scope="row"
-                                    className="py-1 px-4 font-medium whitespace-nowrap"
-                                >
-                                    <span>{d.status === true ? "Hiện" : "Ẩn"}</span>
-                                </td>
-                                <td
-                                    scope="row"
-                                    className="py-1 px-4 font-medium whitespace-nowrap"
-                                >
-                                    <div className="flex justify-start items-center gap-4">
-                          <span
-                              onClick={(e) => {
-                                  e.preventDefault();
-                                  edit_category(d);
-                              }}
-                              title="editor"
-                              className="cursor-pointer p-[6px] bg-yellow-500 rounded hover:shadow-lg hover:shadow-yellow-500/50"
-                          >
+                            {shipping.map((d, i) => (<tr key={i}>
+                                    <td
+                                        scope="row"
+                                        className="py-1 px-4 font-medium whitespace-nowrap"
+                                    >
+                                        {i + 1}
+                                    </td>
+                                    <td
+                                        scope="row"
+                                        className="py-1 px-4 font-medium whitespace-nowrap"
+                                    >
+                                        <span>{d.city}</span>
+                                    </td>
+                                    <td
+                                        scope="row"
+                                        className="py-1 px-4 font-medium whitespace-nowrap"
+                                    >
+                                        <span>{formatCurrency(d.price)}</span>
+                                    </td>
+                                    <td
+                                        scope="row"
+                                        className="py-1 px-4 font-medium whitespace-nowrap"
+                                    >
+                                        <div className="flex justify-start items-center gap-4">
+    <span
+        onClick={(e) => {
+            e.preventDefault();
+            handleEdit(d.price, d.city)
+        }}
+        title="editor"
+        className="cursor-pointer p-[6px] bg-yellow-500 rounded hover:shadow-lg hover:shadow-yellow-500/50"
+    >
                             <FaEdit/>
                           </span>
-                                        {/* Remove */}
-                                        <span
-                                            onClick={() => {
-                                                dispatch(delete_category(d._id));
-                                            }}
-                                            className="p-[6px] bg-red-500 rounded hover:shadow-lg hover:shadow-red-500/50 cursor-pointer"
-                                        >
+                                            {/* Remove */}
+                                            <span
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleDelete(d._id);
+                                                }}
+                                                className="p-[6px] bg-red-500 rounded hover:shadow-lg hover:shadow-red-500/50 cursor-pointer"
+                                            >
                             <FaTrash/>
                           </span>
-                                    </div>
-                                </td>
-                            </tr>))}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
                             </tbody>
                         </table>
                     </div>
@@ -209,9 +268,6 @@ const Category = () => {
                 <div className="w-full pl-5">
                     <div className="bg-[#283046] h-screen lg:h-auto px-3 py-2 lg:rounded-md text-[#d0d2d6]">
                         <div className="flex justify-between items-center mb-4">
-                            <h1 className="text-[#d0d2d6] font-semibold text-xl">
-                                Thêm danh mục
-                            </h1>
                             <div
                                 onClick={() => setShow(false)}
                                 className="block lg:hidden cursor-pointer"
@@ -219,63 +275,44 @@ const Category = () => {
                                 <GrClose className="text-[#d0d2d6]"/>
                             </div>
                         </div>
-                        <form onSubmit={add_category}>
+                        <form>
+
                             <div className="flex flex-col w-full gap-1 mb-3">
-                                <label htmlFor="name">Tên danh mục </label>
+                                <span>Tỉnh/Thành phố: </span>
+                                <select
+                                    className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
+                                    name="city"
+                                    onChange={inputHandle}
+                                    value={state.city}
+                                    required
+                                    id=""
+                                >
+                                    {countryData.map((item) => <>
+                                        <option value={item.name}>{item.name}</option>
+                                    </>)}
+                                </select>
+                            </div>
+                            <div className="flex flex-col w-full gap-1 mb-3">
+                                <label htmlFor="name">Phí </label>
                                 <input
-                                    value={state.name}
-                                    onChange={(e) => setState({...state, name: e.target.value})}
+                                    value={state.price}
+                                    onChange={inputHandle}
                                     className="px-4 py-2 focus:border-indigo-500 outline-none bg-[#283046] border border-slate-700 rounded-md text-[#d0d2d6]"
                                     type="text"
                                     id="name"
-                                    name="category_name"
-                                    placeholder="Tên danh mục"
+                                    name="price"
                                     required
                                 />
                             </div>
-                            <div className="flex flex-col w-full gap-1 mb-3">
-                                <div>
-                                    <label htmlFor="">Trạng thái</label>
-                                </div>
-                                <div className="">
-                                    <label className="mr-2" htmlFor="">
-                                        Ẩn
-                                    </label>
-                                    <Switch checked={state?.status == true ? true : false} onChange={onChange}/>
-                                    <label className="ml-2" htmlFor="">
-                                        Hiện
-                                    </label>
-                                </div>
-                            </div>
-                            <div>
-                                <label
-                                    className="flex justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-indigo-500 w-full border-[#d0d2d6]"
-                                    htmlFor="image"
-                                >
-                                    {imageShow ? (<img className="w-full h-full" src={imageShow}/>) : (<>
-                        <span>
-                          <BsImage/>
-                        </span>
-                                        <span>Chọn ảnh</span>
-                                    </>)}
-                                </label>
-                            </div>
-                            <input
-                                onChange={imageHandle}
-                                className="hidden"
-                                type="file"
-                                name="image"
-                                id="image"
-                            />
                             <div className="mt-4">
                                 <button
-                                    disabled={loader ? true : false}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleUpdate()
+                                    }}
                                     className="bg-blue-500 w-full hover:shadow-blue-500/20 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3"
                                 >
-                                    {loader ? (<PropagateLoader
-                                        color="#fff"
-                                        cssOverride={overrideStyle}
-                                    />) : statusFrom == 0 ? ("Thêm danh mục") : ("Cập nhật danh mục")}
+                                    Cập nhật
                                 </button>
                                 {statusFrom == 1 && (<button
                                     onClick={(e) => {
