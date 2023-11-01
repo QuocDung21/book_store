@@ -16,7 +16,7 @@ class authControllers {
         try {
             const admin = await adminModel.findOne({email}).select("+password");
             if (admin) {
-                const match = await bcrpty.compare(password, admin.password);
+                    const match = await bcrpty.compare(password, admin.password);
                 if (match) {
                     const token = await createToken({
                         id: admin.id,
