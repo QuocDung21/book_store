@@ -10,6 +10,7 @@ import {
 } from "../../store/reducers/cardReducer";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import {formatCurrency} from "../../fun/fun";
 const ShopProducts = ({ styles, products }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -104,11 +105,11 @@ const ShopProducts = ({ styles, products }) => {
               </li>
             </ul>
           </div>
-          <div className="flex justify-start items-start flex-col gap-1">
+          <div className="flex justify-start items-start flex-row gap-1">
             <h2 className="text-md text-slate-700 font-medium">{p.name}</h2>
             <div className="flex justify-start items-center gap-2">
               <span className="text-md  font-bold text-slate-700">
-                ${p.price}
+                  {formatCurrency(p.price)}
               </span>
               <div className="flex text-lg">
                 <Ratings ratings={p.rating} />

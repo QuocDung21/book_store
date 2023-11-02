@@ -5,6 +5,7 @@ const myShopWallet = require('../../models/myShopWallet')
 const withdrowRequest = require('../../models/withdrowRequest')
 const { responseReturn } = require('../../utiles/response')
 const { mongo: { ObjectId } } = require('mongoose')
+const fx = require('money');
 const { v4: uuidv4 } = require('uuid')
 const stripe = require('stripe')('sk_test_51Nk8Y4F0B89ncn3xMHxYCwnaouDR6zuX83ckbJivv2jOUJ9CTka6anJcKMLnatgeBUeQq1RcRYynSPgp6f5zS4qF00YZFMYHuD')
 class paymentController {
@@ -18,7 +19,6 @@ class paymentController {
             if (stripInfo) {
                 await striptModel.deleteOne({ sellerId: id })
                 const account = await stripe.accounts.create({ type: 'express' })
-
                 const accountLink = await stripe.accountLinks.create({
                     account: account.id,
                     refresh_url: 'http://localhost:3001/refresh',
@@ -137,13 +137,20 @@ class paymentController {
         }
     }
 
+
+    // conver
     withdrowal_request = async (req, res) => {
+        fx.base = 'VND';
+        fx.rates = {
+            'USD': 0.000043,
+        };
+
         const { amount, sellerId } = req.body
-        console.log(req.body)
+        const amountUSD = fx.convert(amount, { from: 'VND', to: 'USD' });
         try {
             const withdrowal = await withdrowRequest.create({
                 sellerId,
-                amount: parseInt(amount)
+                amount: parseInt(amountUSD)
             })
             responseReturn(res, 200, { withdrowal, message: 'withdrowal request send' })
         } catch (error) {
