@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { get_orders } from "../../store/reducers/orderReducer";
+import {formatCurrency} from "../../fun/fun";
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -81,7 +82,7 @@ const Orders = () => {
                     scope="row"
                     className="px-6 py-4 font-medium whitespace-nowrap"
                   >
-                    ${o.price}
+                    {formatCurrency(o.price)}
                   </td>
                   <td
                     scope="row"

@@ -29,6 +29,8 @@ const Shipping = () => {
         ship_spend: 0.1
     });
 
+
+
     const [shipping, setShipping] = useState([])
 
     const getShipping = async () => {
@@ -43,6 +45,7 @@ const Shipping = () => {
             city
         }).then(async (res) => {
             setState({
+                ...state,
                 constShip: res.data.price
             })
         }).catch((error) => {
@@ -64,12 +67,13 @@ const Shipping = () => {
     const save = async (e) => {
         e.preventDefault()
         await handleGetCost(state.city)
-        return
         const {name, address, phone, post, province, city, area} = state;
-        if (name && address && phone && post && province && city && area) {
+        if (name && address && phone && post && city && area) {
+            // if (name && address && phone && post && city ) {
             setRes(true);
         }
     };
+
 
     const getCountry = async () => {
         try {
@@ -196,35 +200,18 @@ const Shipping = () => {
                                                         </select>
                                                     </div>
 
-                                                    <div className="flex flex-col gap-1 mb-2 w-full">
-                                                        <div className="flex flex-col gap-1 mb-2 w-full">
-                                                            <span>Vận chuyển: </span>
-                                                            <select
-                                                                className="px-4 py-2  border-slate-200 outline-none border  rounded-md text-slate-600"
-                                                                name="ship_spend"
-                                                                required
-                                                                id=""
-                                                                value={state.ship_spend}
-                                                                onChange={inputHandle}
-                                                            >
-                                                                <option value={[0.3, "Hoả tốc"]}>Hoả tốc</option>
-                                                                <option value={[0.2, "Nhanh"]}>Nhanh</option>
-                                                                <option value={[0.1, "Chậm"]}>Chậm</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
 
                                                 </div>
                                                 <div className="flex md:flex-col md:gap-2 w-full gap-5 text-slate-600">
                                                     <div className="flex flex-col gap-1 mb-2 w-full">
-                                                        <label htmlFor="area">Phường / Xã</label>
+                                                        <label htmlFor="area">Ghi chú</label>
                                                         <input
                                                             onChange={inputHandle}
                                                             value={state.area}
                                                             type="text"
                                                             className="w-full px-3 py-2 border border-slate-200 outline-none focus:border-indigo-500 rounded-md"
                                                             name="area"
-                                                            placeholder="Phường / Xã"
+                                                            placeholder="Ghi chú"
                                                             id="province"
                                                         />
                                                     </div>
@@ -248,7 +235,7 @@ const Shipping = () => {
                           Nhà
                         </span>
                                                 <span className="text-slate-600 text-sm">
-                          {state.address} {state.province} {state.city}{" "}
+                          {state.address} {state.city}{" "}
                                                     {state.area}
                         </span>
                                                 <span
@@ -260,7 +247,7 @@ const Shipping = () => {
                         </span>
                                             </p>
                                             <p className="text-slate-600 text-sm">
-                                                Email đến sheikhfarid@gmail.com
+                                                Email đến :
                                             </p>
                                         </div>
                                     )}
@@ -315,29 +302,51 @@ const Shipping = () => {
                                 <div className="bg-white font-medium p-5 text-slate-600 flex flex-col gap-3">
                                     <h2 className="text-xl font-semibold">Tóm tắt đơn hàng</h2>
                                     <div className="flex justify-between items-center">
-                                        <span>Phương thức vật chuyển</span>
-                                        <span>
-  {state.ship_spend === 0.3
-      ? "Hoả tốc"
-      : state.ship_spend === 0.2
-          ? "Nhanh"
-          : state.ship_spend === 0.1
-              ? "Chậm"
-              : "Chậm"}
-</span>
+                                        <span>Phụ thu vận chuyển</span>
+                                        <span>{formatCurrency(Math.floor(
+                                            (state.constShip *
+                                                state.ship_spend) /
+                                            100)
+                                        )}
+                                        </span>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span>Phí giao hàng</span>
                                         <span>{formatCurrency(state.constShip)}</span>
                                     </div>
+                                    <div className="flex flex-col gap-1 mb-2 w-full">
+                                        <div className="flex flex-col gap-1 mb-2 w-full">
+                                            <span>Vận chuyển: </span>
+                                            <select
+                                                className="px-4 py-2  border-slate-200 outline-none border  rounded-md text-slate-600"
+                                                name="ship_spend"
+                                                required
+                                                id=""
+                                                value={state.ship_spend}
+                                                onChange={inputHandle}
+                                            >
+                                                <option value={30}>Hoả tốc</option>
+                                                <option value={20}>Nhanh</option>
+                                                <option value={10}>Chậm</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div className="flex justify-between items-center">
                                         <span>Tổng thanh toán</span>
-                                        <span>{formatCurrency(price + state.constShip)}</span>
+                                        <span>{formatCurrency(price + state.constShip + Math.floor(
+                                            (state.constShip *
+                                                state.ship_spend) /
+                                            100))}</span>
                                     </div>
                                     <div className="flex justify-between items-center">
                                         <span>Tổng cộng</span>
-                                        <span>{formatCurrency(price + state.constShip)}</span>
+                                        <span>{formatCurrency(price + state.constShip + Math.floor(
+                                            (state.constShip *
+                                                state.ship_spend) /
+                                            100))}</span>
                                     </div>
+
+
                                     <button
                                         onClick={placeOrder}
                                         disabled={res ? false : true}

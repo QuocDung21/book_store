@@ -13,6 +13,7 @@ import {
   quantity_inc,
   quantity_dec,
 } from "../store/reducers/cardReducer";
+import {formatCurrency} from "../fun/fun";
 
 const Card = () => {
   const dispatch = useDispatch();
@@ -32,7 +33,7 @@ const Card = () => {
       state: {
         products: card_products,
         price: price,
-        shipping_fee: shipping_fee,
+        shipping_fee: 0,
         items: buy_product_item,
       },
     });
@@ -109,16 +110,15 @@ const Card = () => {
                             <div className="flex justify-between w-5/12 sm:w-full sm:mt-3">
                               <div className="pl-4 sm:pl-0">
                                 <h2 className="text-lg text-orange-500">
-                                  $
-                                  {pt.productInfo.price -
-                                    Math.floor(
-                                      (pt.productInfo.price *
-                                        pt.productInfo.discount) /
-                                        100
-                                    )}
+                                  {formatCurrency(pt.productInfo.price -
+                                      Math.floor(
+                                          (pt.productInfo.price *
+                                              pt.productInfo.discount) /
+                                          100
+                                      ))}
                                 </h2>
                                 <p className="line-through">
-                                  {pt.productInfo.price}
+                                  {formatCurrency(pt.productInfo.price)}
                                 </p>
                                 <p>-{pt.productInfo.discount}%</p>
                               </div>
@@ -189,16 +189,15 @@ const Card = () => {
                               <div className="flex justify-between w-5/12 sm:w-full sm:mt-3">
                                 <div className="pl-4 sm:pl-0">
                                   <h2 className="text-lg text-orange-500">
-                                    $
-                                    {p.products[0].price -
-                                      Math.floor(
-                                        (p.products[0].price *
-                                          p.products[0].discount) /
-                                          100
-                                      )}
+                                    {formatCurrency(p.products[0].price -
+                                        Math.floor(
+                                            (p.products[0].price *
+                                                p.products[0].discount) /
+                                            100
+                                        ))}
                                   </h2>
                                   <p className="line-through">
-                                    {p.products[0].price}
+                                    {formatCurrency(p.products[0].price)}
                                   </p>
                                   <p>-{p.products[0].discount}%</p>
                                 </div>
@@ -249,12 +248,12 @@ const Card = () => {
                       <h2 className="text-xl font-bold">Tóm tắt đơn hàng</h2>
                       <div className="flex justify-between items-center">
                         <span>{buy_product_item} Sản phẩm</span>
-                        <span>${price}</span>
+                        <span>{formatCurrency(price)}</span>
                       </div>
-                      <div className="flex justify-between items-center">
-                        <span>Phí vận chuyển</span>
-                        <span>${shipping_fee}</span>
-                      </div>
+                      {/*<div className="flex justify-between items-center">*/}
+                      {/*  <span>Phí vận chuyển</span>*/}
+                      {/*  <span>${shipping_fee}</span>*/}
+                      {/*</div>*/}
                       {/* <div className="flex gap-2">
                         <input
                           className="w-full px-3 py-2 border border-slate-200 outline-0 focus:border-green-500 rounded-sm"
@@ -268,7 +267,7 @@ const Card = () => {
                       <div className="flex justify-between items-center">
                         <span>Tổng cộng</span>
                         <span className="text-lg text-orange-500">
-                          ${price + shipping_fee}
+                          {formatCurrency(price + shipping_fee)}
                         </span>
                       </div>
                       <button

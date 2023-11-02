@@ -3,11 +3,13 @@ import Headers from "../components/Headers";
 import Footer from "../components/Footer";
 import Stripe from "../components/Stripe";
 import { useLocation } from "react-router-dom";
+import {formatCurrency} from "../fun/fun";
 
 const Payment = () => {
   const {
     state: { price, items, orderId },
   } = useLocation();
+
   const [paymentMethod, setPaymentMethod] = useState("stripe");
 
   return (
@@ -33,48 +35,6 @@ const Payment = () => {
                       <span className="text-slate-600">Stripe</span>
                     </div>
                   </div>
-                  {/* <div
-                    onClick={() => setPaymentMethod("bkash")}
-                    className={`w-[20%] border-r cursor-pointer py-8 px-12 ${
-                      paymentMethod === "bkash" ? "bg-white" : "bg-slate-100"
-                    }`}
-                  >
-                    <div className="flex flex-col gap-[3px] justify-center items-center">
-                      <img
-                        src="http://localhost:3000/images/payment/bkash.png"
-                        alt="bkash"
-                      />
-                      <span className="text-slate-600">Bkash</span>
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => setPaymentMethod("nogot")}
-                    className={`w-[20%] border-r cursor-pointer py-8 px-12 ${
-                      paymentMethod === "nogot" ? "bg-white" : "bg-slate-100"
-                    }`}
-                  >
-                    <div className="flex flex-col gap-[3px] justify-center items-center">
-                      <img
-                        src="http://localhost:3000/images/payment/nogot.png"
-                        alt="nogot"
-                      />
-                      <span className="text-slate-600">Nogot</span>
-                    </div>
-                  </div>
-                  <div
-                    onClick={() => setPaymentMethod("roket")}
-                    className={`w-[20%] border-r cursor-pointer py-8 px-12 ${
-                      paymentMethod === "roket" ? "bg-white" : "bg-slate-100"
-                    }`}
-                  >
-                    <div className="flex flex-col gap-[3px] justify-center items-center">
-                      <img
-                        src="http://localhost:3000/images/payment/roket.png"
-                        alt="roket"
-                      />
-                      <span className="text-slate-600">Roket</span>
-                    </div>
-                  </div> */}
                 </div>
                 {paymentMethod === "stripe" && (
                   <div>
@@ -110,11 +70,11 @@ const Payment = () => {
                   <h2>Tóm tắt đơn hàng</h2>
                   <div className="flex justify-between items-center">
                     <span>{items} sản phẩm và phí vận chuyển</span>
-                    <span>${price}</span>
+                    <span>{formatCurrency(price)}</span>
                   </div>
                   <div className="flex justify-between items-center font-semibold">
                     <span>Tổng cộng</span>
-                    <span className="text-lg text-orange-500">${price}</span>
+                    <span className="text-lg text-orange-500">{formatCurrency(price)}</span>
                   </div>
                 </div>
               </div>

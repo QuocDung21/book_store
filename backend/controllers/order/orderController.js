@@ -194,13 +194,11 @@ class orderController {
                         {
                             $lookup: {
                                 from: "authororders",
+                                // from: "authororders",
                                 localField: "_id",
                                 foreignField: "orderId",
                                 as: "suborder",
                             },
-                        },
-                        {
-                            $unionWith: "customerorders"
                         }
                     ])
                     .skip(skipPage)
@@ -293,11 +291,9 @@ class orderController {
 
     get_seller_order = async (req, res) => {
         const {orderId} = req.params;
-
         try {
             const order = await authOrderModel.findById(orderId);
-
-            responseReturn(res, 200, {order});
+               responseReturn(res, 200, {order});
         } catch (error) {
             console.log("get admin order " + error.message);
         }

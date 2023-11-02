@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { get_order } from "../../store/reducers/orderReducer";
+import {formatCurrency} from "../../fun/fun";
 
 const Order = () => {
   const { orderId } = useParams();
@@ -40,7 +41,7 @@ const Order = () => {
           </p>
         </div>
         <div className="text-slate-600">
-          <h2>Giá: ${myOrder.price} bao gồm phí vận chuyển</h2>
+          <h2>Giá: {formatCurrency(myOrder.price)} bao gồm phí vận chuyển</h2>
           <p>
             Trạng thái thanh toán:{" "}
             <span
@@ -62,7 +63,7 @@ const Order = () => {
                   : "bg-red-100 text-red-800"
               } rounded-md `}
             >
-              {myOrder.delivery_status}
+              {myOrder.delivery_status == "placed" ?  "Đã đặt" : myOrder.delivery_status}
             </span>
           </p>
         </div>
@@ -76,23 +77,24 @@ const Order = () => {
                 <div className="flex gap-2">
                   <img
                     className="w-[55px] h-[55px]"
-                    src={p.images[0]}
+                    src={p.images[0] ? p.images[0] : "https://icons8.com/preloaders/img/ajax-loader-preview.png"}
                     alt="image"
                   />
                   <div className="flex text-sm flex-col justify-start items-start">
-                    <Link>{p.name}</Link>
+                    <Link>Tên sản phẩm : {p.name}</Link>
                     <p>
                       <span>Thương hiệu: {p.brand}</span>
+                      <br/>
                       <span>Số lượng : {p.quantity}</span>
                     </p>
                   </div>
                 </div>
                 <div className="pl-4">
                   <h2 className="text-md text-orange-500">
-                    ${p.price - Math.floor((p.price * p.discount) / 100)}
+                 Giá sau khi giảm :   {formatCurrency(p.price - Math.floor((p.price * p.discount) / 100))}
                   </h2>
-                  <p>{p.price}</p>
-                  <p>-{p.discount}%</p>
+                  <p>Giá : {p.price}</p>
+                  <p>Giảm : -{p.discount}%</p>
                 </div>
               </div>
             </div>
