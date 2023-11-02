@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import seller from "../../assets/seller.png";
 
 import { get_admin_dashboard_index_data } from "../../store/Reducers/dashboardIndexReducer";
+import {formatCurrency} from "../../fun/fun";
 
 const AdminDashboard = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -120,8 +121,8 @@ const AdminDashboard = () => {
       <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7">
         <div className="flex justify-between items-center p-5 bg-[#283046] rounded-md gap-3">
           <div className="flex flex-col justify-start items-start text-[#d0d2d6]">
-            <h2 className="text-3xl font-bold">${totalSale}</h2>
-            <span className="text-md font-medium">Total Sales</span>
+            <h2 className="text-3xl font-bold">{formatCurrency(totalSale)}</h2>
+            <span className="text-md font-medium">Tổng danh thu</span>
           </div>
           <div className="w-[46px] h-[47px] rounded-full bg-[#28c76f1f] flex justify-center items-center text-xl">
             <BsCurrencyDollar className="text-[#28c76f] shadow-lg" />
@@ -130,7 +131,7 @@ const AdminDashboard = () => {
         <div className="flex justify-between items-center p-5 bg-[#283046] rounded-md gap-3">
           <div className="flex flex-col justify-start items-start text-[#d0d2d6]">
             <h2 className="text-3xl font-bold">{totalProduct}</h2>
-            <span className="text-md font-medium">Products</span>
+            <span className="text-md font-medium">Sản phẩm</span>
           </div>
           <div className="w-[46px] h-[47px] rounded-full bg-[#e000e81f] flex justify-center items-center text-xl">
             <RiProductHuntLine className="text-[#cd00e8] shadow-lg" />
@@ -256,7 +257,7 @@ const AdminDashboard = () => {
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    ${d.price}
+                    {formatCurrency(d.price)}
                   </td>
                   <td
                     scope="row"

@@ -7,6 +7,7 @@ import {
   admin_order_status_update,
   messageClear,
 } from "../../store/Reducers/OrderReducer";
+import {formatCurrency} from "../../fun/fun";
 
 const OrderDetails = () => {
   const { orderId } = useParams();
@@ -87,7 +88,7 @@ const OrderDetails = () => {
                   <h2>Tình trạng thanh toán: </h2>
                   <span className="text-base">{order.payment_status}</span>
                 </div>
-                <span>Giá: ${order.price}</span>
+                <span>Giá: {formatCurrency(order?.price)}</span>
                 <div className="mt-4 flex flex-col gap-8">
                   <div className="text-[#d0d2d6]">
                     {order.products &&

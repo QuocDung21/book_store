@@ -9,7 +9,7 @@ import axios from "axios";
 import api from "../../api/api";
 import {FaEdit, FaTrash} from "react-icons/fa";
 import {delete_category} from "../../store/Reducers/categoryReducer";
-import {country, getFun} from "../../fun/fun";
+import {country, formatCurrency, getFun} from "../../fun/fun";
 import {MdKeyboardArrowDown} from "react-icons/md";
 
 const UserDetails = () => {
@@ -154,7 +154,7 @@ const UserDetails = () => {
                                 <div className="py-4 w-[25%] font-medium whitespace-nowrap">
                                     {o._id}
                                 </div>
-                                <div className="py-4 w-[13%]">${o.price}</div>
+                                <div className="py-4 w-[13%]">{formatCurrency(o.price)}</div>
                                 <div className="py-4 w-[18%]">{o.payment_status}</div>
                                 <div className="py-4 w-[18%]">{o.delivery_status}</div>
                                 <div className="py-4 w-[18%]">

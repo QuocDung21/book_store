@@ -276,7 +276,6 @@ const Category = () => {
                             </div>
                         </div>
                         <form>
-
                             <div className="flex flex-col w-full gap-1 mb-3">
                                 <span>Tỉnh/Thành phố: </span>
                                 <select
