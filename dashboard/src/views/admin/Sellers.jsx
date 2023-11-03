@@ -82,7 +82,7 @@ const Sellers = () => {
                             Tên cửa hàng
                         </th>
                         <th scope="col" className="py-3 px-4">
-                            Trạng thái thanh toán
+                            Trạng thái
                         </th>
                         <th scope="col" className="py-3 px-4">
                             Email

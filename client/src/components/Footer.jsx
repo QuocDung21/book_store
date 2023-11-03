@@ -51,23 +51,23 @@ const Footer = () => {
                     <Link>Bài viết</Link>
                   </li>
                 </ul>
-                <ul className="flex flex-col gap-2 text-slate-600 text-sm">
-                  <li>
-                    <Link>Về chúng tôi</Link>
-                  </li>
-                  <li>
-                    <Link>Về cửa hàng của chúng tôi</Link>
-                  </li>
-                  <li>
-                    <Link>Thông tin giao hàng</Link>
-                  </li>
-                  <li>
-                    <Link>Chính sách bảo mật</Link>
-                  </li>
-                  <li>
-                    <Link>Bài viết</Link>
-                  </li>
-                </ul>
+                {/*<ul className="flex flex-col gap-2 text-slate-600 text-sm">*/}
+                {/*  <li>*/}
+                {/*    <Link>Về chúng tôi</Link>*/}
+                {/*  </li>*/}
+                {/*  <li>*/}
+                {/*    <Link>Về cửa hàng của chúng tôi</Link>*/}
+                {/*  </li>*/}
+                {/*  <li>*/}
+                {/*    <Link>Thông tin giao hàng</Link>*/}
+                {/*  </li>*/}
+                {/*  <li>*/}
+                {/*    <Link>Chính sách bảo mật</Link>*/}
+                {/*  </li>*/}
+                {/*  <li>*/}
+                {/*    <Link>Bài viết</Link>*/}
+                {/*  </li>*/}
+                {/*</ul>*/}
               </div>
             </div>
           </div>
@@ -78,16 +78,16 @@ const Footer = () => {
             <span>
               Nhận cập nhật qua email về các ưu đãi mới nhất của chúng tôi
             </span>
-            <div className="h-[50px] w-full bg-white border relative">
-              <input
-                placeholder="Nhập email của bạn"
-                className="h-full bg-transparent w-full px-3 outline-0"
-                type="text"
-              />
-              <button className="h-full absolute right-0 bg-indigo-500 text-white uppercase px-4 font-bold text-sm">
-                Đăng ký
-              </button>
-            </div>
+            {/*<div className="h-[50px] w-full bg-white border relative">*/}
+            {/*  <input*/}
+            {/*    placeholder="Nhập email của bạn"*/}
+            {/*    className="h-full bg-transparent w-full px-3 outline-0"*/}
+            {/*    type="text"*/}
+            {/*  />*/}
+            {/*  <button className="h-full absolute right-0 bg-indigo-500 text-white uppercase px-4 font-bold text-sm">*/}
+            {/*    Đăng ký*/}
+            {/*  </button>*/}
+            {/*</div>*/}
             <ul className="flex justify-start items-center gap-3">
               <li>
                 <a

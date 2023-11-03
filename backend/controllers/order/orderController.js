@@ -58,7 +58,6 @@ class orderController {
                 }
             }
         }
-
         try {
             const order = await customerOrder.create({
                 customerId: userId,
@@ -146,7 +145,6 @@ class orderController {
 
     get_orders = async (req, res) => {
         const {customerId, status} = req.params;
-
         try {
             let orders = [];
             if (status !== "all") {
@@ -183,9 +181,7 @@ class orderController {
         let {page, parPage, searchValue} = req.query;
         page = parseInt(page);
         parPage = parseInt(parPage);
-
         const skipPage = parPage * (page - 1);
-
         try {
             if (searchValue) {
             } else {
@@ -194,7 +190,6 @@ class orderController {
                         {
                             $lookup: {
                                 from: "authororders",
-                                // from: "authororders",
                                 localField: "_id",
                                 foreignField: "orderId",
                                 as: "suborder",
@@ -293,7 +288,7 @@ class orderController {
         const {orderId} = req.params;
         try {
             const order = await authOrderModel.findById(orderId);
-               responseReturn(res, 200, {order});
+            responseReturn(res, 200, {order});
         } catch (error) {
             console.log("get admin order " + error.message);
         }
