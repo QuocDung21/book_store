@@ -22,6 +22,7 @@ import {
   add_to_wishlist,
 } from "../store/reducers/cardReducer";
 import toast from "react-hot-toast";
+import {formatCurrency} from "../fun/fun";
 
 const Details = () => {
   const navigate = useNavigate();
@@ -233,13 +234,12 @@ const Details = () => {
               <div className="text-2xl text-black font-bold flex gap-3">
                 {product.discount !== 0 ? (
                   <>
-                    <h2 className="line-through">${product.price}</h2>
+                    <h2 className="line-through">{formatCurrency(product.price)}</h2>
                     <h2>
-                      $
-                      {product.price -
-                        Math.floor(
-                          (product.price * product.discount) / 100
-                        )}{" "}
+                      {formatCurrency(product.price -
+                          Math.floor(
+                              (product.price * product.discount) / 100
+                          ))}{" "}
                       (-{product.discount}%)
                     </h2>
                   </>
@@ -426,7 +426,7 @@ const Details = () => {
                         <h2 className="text-slate-600 py-1">{p.name}</h2>
                         <div className="flex gap-2">
                           <h2 className="text-[#6699ff] text-lg font-bold">
-                            ${p.price}
+                            {formatCurrency(p.price)}
                           </h2>
                           <div className="flex items-center gap-2">
                             <Ratings ratings={p.rating} />

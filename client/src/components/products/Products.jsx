@@ -3,6 +3,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { FiChevronRight, FiChevronLeft } from "react-icons/fi";
 import { Link } from "react-router-dom";
+import {formatCurrency} from "../../fun/fun";
 const Products = ({ title, products }) => {
   const responsive = {
     superLargeDesktop: {
@@ -78,7 +79,7 @@ const Products = ({ title, products }) => {
                   />
                   <div className="px-3 flex justify-start items-start gap-1 flex-col text-slate-600">
                     <h2>{pl.name}</h2>
-                    <span className="text-lg font-bold">${pl.price}</span>
+                    <span className="text-lg font-bold">{formatCurrency(pl.price)}</span>
                   </div>
                 </Link>
               ))}

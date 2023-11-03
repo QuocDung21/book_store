@@ -171,11 +171,8 @@ const AdminDashboard = () => {
           <div className="w-full bg-[#283046] p-4 rounded-md text-[#d0d2d6]">
             <div className="flex justify-between items-center">
               <h2 className="font-semibold text-lg text-[#d0d2d6] pb-3">
-                Recent seller message
+              Tin nhắn gần đây
               </h2>
-              <Link className="font-semibold text-sm text-[#d0d2d6]">
-                View All
-              </Link>
             </div>
             <div className="flex flex-col gap-2 pt-6 text-[#d0d2d6]">
               <ol className="relative border-1 border-slate-600 ml-4">
@@ -219,25 +216,25 @@ const AdminDashboard = () => {
       <div className="w-full p-4  bg-[#283046] rounded-md mt-6">
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-lg text-[#d0d2d6] pb-3">
-            Recent Orders
+           Đơn hàng gần đây
           </h2>
-          <Link className="font-semibold text-sm text-[#d0d2d6]">View All</Link>
+          {/*<Link className="font-semibold text-sm text-[#d0d2d6]">View All</Link>*/}
         </div>
         <div className="relative overflow-x-auto">
           <table className="w-full text-sm text-left text-[#d0d2d6]">
             <thead className="text-sm text-[#d0d2d6] uppercase border-b border-slate-700">
               <tr>
                 <th scope="col" className="py-3 px-4">
-                  Order Id
+                  Mã đơn
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Price
+                  Giá
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Payment Status
+                 Trạngt thái thanh toán
                 </th>
                 <th scope="col" className="py-3 px-4">
-                  Order Status
+                 Trạng thái đơn hàng
                 </th>
                 <th scope="col" className="py-3 px-4">
                   Active
@@ -263,7 +260,7 @@ const AdminDashboard = () => {
                     scope="row"
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
-                    <span>{d.delivery_status}</span>
+                    <span>{d.delivery_status != "placed" ? d.delivery_status : "Đã giao thành công"}</span>
                   </td>
                   <td
                     scope="row"
@@ -276,7 +273,7 @@ const AdminDashboard = () => {
                     className="py-3 px-4 font-medium whitespace-nowrap"
                   >
                     <Link to={`/admin/dashboard/order/details/${d._id}`}>
-                      view
+                      Xem
                     </Link>
                   </td>
                 </tr>

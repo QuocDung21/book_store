@@ -96,7 +96,7 @@ const OrderDetails = () => {
                         <div key={i} className="flex gap-3 text-md">
                           <img
                             className="w-[45px] h-[45px]"
-                            src={p.images[0]}
+                            src={p.images[0] ? p.images[0] : "https://www.medievalacademy.org/global_graphics/default-store-350x350.jpg" }
                             alt=""
                           />
                           <div>
@@ -129,7 +129,7 @@ const OrderDetails = () => {
                         <div className="flex gap-3 text-md mt-2">
                           <img
                             className="w-[45px] h-[45px]"
-                            src={p.images[0]}
+                            src={p.images[0] ? p.images[0] : "https://www.medievalacademy.org/global_graphics/default-store-350x350.jpg"}
                             alt=""
                           />
                           <div>

@@ -13,6 +13,7 @@ const Shipping = () => {
     const dispatch = useDispatch();
     const [countryData, setCountryData] = useState([])
     const {userInfo} = useSelector((state) => state.auth);
+    const locationData = useLocation();
     const {
         state: {products, price, shipping_fee, items},
     } = useLocation();
@@ -28,6 +29,7 @@ const Shipping = () => {
         constShip: 0,
         ship_spend: 0.1
     });
+
 
 
 
@@ -94,7 +96,7 @@ const Shipping = () => {
             place_order({
                 price,
                 products,
-                shipping_fee,
+                shipping_fee: (state.constShip + (state.constShip * state.ship_spend / 100)),
                 shippingInfo: state,
                 userId: userInfo.id,
                 navigate,

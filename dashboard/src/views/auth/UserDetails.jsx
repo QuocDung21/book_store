@@ -156,7 +156,7 @@ const UserDetails = () => {
                                 </div>
                                 <div className="py-4 w-[13%]">{formatCurrency(o.price)}</div>
                                 <div className="py-4 w-[18%]">{o.payment_status}</div>
-                                <div className="py-4 w-[18%]">{o.delivery_status}</div>
+                                <div className="py-4 w-[18%]">{o.delivery_status != "placed" ? o.delivery_status : "Đã giao thành công"}</div>
                                 <div className="py-4 w-[18%]">
                                     <Link to={`/admin/dashboard/order/details/${o._id}`}>
                                         Xem
